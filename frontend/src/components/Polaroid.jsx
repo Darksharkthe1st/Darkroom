@@ -1,8 +1,10 @@
+import resumeImg from '../../resume.png'
+
 export default function Polaroid({ name, role, year, progress }) {
   return (
     <div className="polaroid">
       <div className="pimage">
-        <img src="/resume.png" alt="résumé" />
+        <img src={resumeImg} alt="résumé" />
         <div className="wash" />
       </div>
       <div className="pcaption">

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Darkroom — Design Pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0705; --surface:#0f0a06; --card:#1a1512;
+    --border:#2a2017; --border-sub:#1c140d;
+    --accent:#E07B39; --accent-soft:#f3ad6f; --accent-hover:#C96B2A;
+    --t1:#cdbb9a; --t2:#8c8072; --t3:#5f4f39; --dev:#3c2e1c;
+    --green:#3FB950; --red:#DA3630;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --serif:'Playfair Display',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:
+      radial-gradient(70% 50% at 18% 0%, rgba(224,123,57,.12), transparent 55%),
+      linear-gradient(165deg,#160d07,#0b0805 55%,#070504);
+    background-attachment:fixed;color:var(--t1);font-family:var(--mono);-webkit-font-smoothing:antialiased;
+    line-height:1.6;padding:0 0 120px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 40px}
+
+  /* masthead */
+  header{padding:78px 0 46px;border-bottom:1px solid var(--border-sub);margin-bottom:8px}
+  .wordmark{font-size:15px;letter-spacing:.16em;font-weight:500;color:var(--t1)}
+  .wordmark b{color:var(--accent);font-weight:500}
+  h1{font-family:var(--serif);font-size:52px;font-weight:500;color:#f2e6cf;letter-spacing:.005em;margin:26px 0 14px;line-height:1.05}
+  .lede{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--t2);max-width:680px;line-height:1.55}
+  .metaline{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
+  .metaline .pill{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);
+    border:1px solid var(--border);border-radius:20px;padding:6px 13px}
+  .metaline .pill b{color:var(--accent-soft);font-weight:500}
+
+  /* section scaffolding */
+  section{padding:54px 0;border-bottom:1px solid var(--border-sub)}
+  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h2{font-family:var(--serif);font-size:30px;font-weight:500;color:#ecdcc0;margin-bottom:8px;letter-spacing:.005em}
+  .intro{font-size:13px;color:var(--t2);max-width:720px;margin-bottom:30px;line-height:1.7}
+  h3{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--t1);margin:34px 0 16px}
+  p{font-size:13px;color:var(--t2);max-width:760px}
+  code{font-family:var(--mono);font-size:12px;color:var(--accent-soft);background:rgba(224,123,57,.08);
+    border:1px solid rgba(224,123,57,.16);border-radius:3px;padding:1px 6px}
+  a{color:var(--accent-soft)}
+
+  /* metaphor glossary */
+  .glossary{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .gcard{background:rgba(20,14,8,.5);border:1px solid var(--border-sub);border-radius:8px;padding:20px 22px}
+  .gcard .term{font-size:12px;letter-spacing:.04em;color:var(--accent-soft);margin-bottom:5px}
+  .gcard .term b{color:var(--t1);font-weight:500}
+  .gcard .def{font-size:12.5px;color:var(--t2);line-height:1.6}
+
+  /* color grid */
+  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .sw{border:1px solid var(--border-sub);border-radius:8px;overflow:hidden;background:var(--surface)}
+  .sw .chip{height:74px}
+  .sw .meta{padding:11px 13px 13px}
+  .sw .nm{font-size:11px;color:var(--t1);letter-spacing:.03em}
+  .sw .hex{font-size:11px;color:var(--t3);margin-top:3px;text-transform:uppercase}
+  .sw .use{font-size:10.5px;color:var(--t2);margin-top:7px;line-height:1.45}
+
+  /* type specimens */
+  .spec{border:1px solid var(--border-sub);border-radius:8px;padding:24px 26px;margin-bottom:14px;background:rgba(20,14,8,.4)}
+  .spec .tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;display:flex;gap:16px;flex-wrap:wrap}
+  .spec .tag b{color:var(--accent-soft);font-weight:400}
+  .sample-serif{font-family:var(--serif)}
+  .sample-mono{font-family:var(--mono)}
+
+  /* token tables */
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);
+    font-weight:400;padding:0 14px 12px;border-bottom:1px solid var(--border-sub)}
+  td{padding:13px 14px;border-bottom:1px solid var(--border-sub);color:var(--t2);vertical-align:top}
+  td:first-child{color:var(--t1)}
+  td code{white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+
+  /* layout diagram */
+  .diagram{border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;height:340px;background:var(--surface)}
+  .d-top{height:42px;flex:0 0 42px;border-bottom:1px solid var(--border-sub);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(15,10,6,.6)}
+  .d-top .dl{font-size:11px;letter-spacing:.14em;color:var(--t1)}
+  .d-top .dl b{color:var(--accent)}
+  .d-top .dr{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+  .d-body{flex:1;display:flex;min-height:0}
+  .d-strip{flex:1;border-right:1px solid var(--border-sub);position:relative;display:flex;flex-direction:column}
+  .d-rail{height:54px;flex:0 0 54px;border-bottom:1px dashed var(--border);display:flex;align-items:center;justify-content:center;gap:10px}
+  .d-rail i{width:14px;height:24px;border-radius:3px;background:linear-gradient(90deg,#1c150e,#2c2117,#1c150e);border:1px solid #2c2117}
+  .d-rail i.on{background:linear-gradient(90deg,#3a2410,#E07B39,#3a2410);box-shadow:0 0 10px rgba(224,123,57,.5)}
+  .d-frames{flex:1;display:flex;flex-direction:column;justify-content:center;gap:11px;padding:0 26px}
+  .d-frames .fr{height:2px;background:var(--border);border-radius:2px}
+  .d-frames .fr.a{width:70%;background:var(--accent);opacity:.7}
+  .d-frames .fr.b{width:52%}
+  .d-frames .fr.c{width:62%}
+  .d-panel{flex:0 0 132px;background:linear-gradient(160deg,#120c08,#0a0705);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+  .d-panel .pol{width:74px;background:#ece6d6;padding:5px 5px 0;border-radius:1px;box-shadow:0 10px 24px rgba(0,0,0,.6)}
+  .d-panel .pol .im{height:80px;background:#0a0705;margin-bottom:1px}
+  .d-panel .pol .cap{height:18px}
+  .d-tags{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;font-size:10px}
+  .d-tags div{border:1px solid var(--border-sub);border-radius:6px;padding:9px 11px;color:var(--t2)}
+  .d-tags b{display:block;color:var(--accent-soft);font-weight:400;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+
+  /* component cards — live recreations */
+  .comp{border:1px solid var(--border-sub);border-radius:10px;overflow:hidden;margin-bottom:18px;background:rgba(13,9,6,.5)}
+  .comp .ch{display:flex;align-items:baseline;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border-sub)}
+  .comp .ch .nm{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--t1)}
+  .comp .ch .meta{font-size:10.5px;color:var(--t3)}
+  .comp .stage{padding:30px 24px;display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap;
+    background:
+      radial-gradient(70% 80% at 30% 10%, rgba(224,123,57,.10), transparent 60%),
+      linear-gradient(160deg,#15100a,#0c0805)}
+  .comp .notes{padding:16px 20px;border-top:1px solid var(--border-sub);font-size:11.5px;color:var(--t2);line-height:1.7}
+  .comp .notes b{color:var(--t1);font-weight:500}
+
+  /* canister (matches app) */
+  .can{width:64px;display:flex;flex-direction:column;align-items:center;gap:7px}
+  .can .body{width:46px;height:78px;border-radius:7px;position:relative;
+    background:linear-gradient(90deg,#1c150e,#2c2117 40%,#1c150e);border:1px solid #2c2117;box-shadow:inset 0 0 10px rgba(0,0,0,.6)}
+  .can .body::before{content:"";position:absolute;top:-7px;left:8px;right:8px;height:10px;border-radius:4px 4px 2px 2px;background:#3a2c1c}
+  .can .body::after{content:"";position:absolute;left:7px;right:7px;top:22px;height:32px;background:repeating-linear-gradient(90deg,#231a11 0 3px,#2e2418 3px 6px);border-radius:2px}
+  .can.active .body{background:linear-gradient(90deg,#3a2410,#E07B39 45%,#3a2410);box-shadow:0 0 22px rgba(224,123,57,.5),inset 0 0 10px rgba(0,0,0,.4)}
+  .can .ltr{font-size:9px;color:var(--t3);letter-spacing:.1em}
+  .can.active .ltr{color:var(--accent)}
+  .can .lab{font-size:8px;letter-spacing:.04em;color:var(--t2);text-align:center}
+  .can.active .lab{color:var(--accent-soft)}
+
+  /* frame (matches app) */
+  .frame{width:430px;display:flex}
+  .frame .gutter{flex:0 0 26px;display:flex;align-items:center;justify-content:center}
+  .frame .fnum{writing-mode:vertical-rl;font-size:9px;letter-spacing:.08em;color:var(--t3)}
+  .frame .frow{flex:1;border-bottom:1px solid var(--border-sub);padding:14px 0 14px 16px;min-width:0}
+  .frame .commit{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t1)}
+  .frame .sha{font-size:10px;color:var(--t3)}
+  .frame .stats{display:flex;gap:10px;font-size:10px;margin-left:auto}
+  .frame .add{color:var(--green)}.frame .del{color:var(--red)}.frame .f{color:var(--t2)}
+  .frame .devlabel{font-size:10px;color:#6a5a40;letter-spacing:.08em;margin:10px 0 7px}
+  .frame .bullet{font-family:var(--serif);font-size:13px;line-height:1.55;color:#e2d2b4;border-left:2px solid var(--accent);padding-left:14px}
+  .frame .actions{display:flex;gap:18px;margin-top:12px;padding-left:14px}
+  .frame .actions span{font-size:10px;letter-spacing:.08em;color:var(--t2);text-transform:lowercase}
+  .frame.developing .frow{background:rgba(224,123,57,.05)}
+  .frame.developing .processing{font-size:11px;letter-spacing:.18em;color:var(--accent-soft);border-left:2px solid var(--dev);padding-left:14px}
+  .frame.unexposed .commit{color:#46382a}
+  .badge{display:inline-block;font-size:9px;letter-spacing:.08em;color:#3a2e20;border:1px solid #2a2017;border-radius:2px;padding:2px 7px;margin-left:auto}
+  .frame.cut .frow{opacity:.45;position:relative}
+  .frame.cut .frow::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:#3a2c1c;transform:rotate(-2deg)}
+
+  /* polaroid (matches app) */
+  .polaroid{width:200px;background:#ece6d6;padding:10px 10px 0;border-radius:2px;box-shadow:0 20px 48px rgba(0,0,0,.6)}
+  .polaroid .pimage{position:relative;background:#0a0705;padding:10px;overflow:hidden}
+  .polaroid .pimage img{display:block;width:100%;aspect-ratio:610/791;object-fit:cover;object-position:top center;background:#e9e2d2}
+  .polaroid .wash{position:absolute;left:10px;bottom:10px;height:2px;width:52%;background:var(--accent)}
+  .polaroid .pcaption{padding:11px 4px 14px}
+  .polaroid .pname{font-family:var(--serif);font-size:15px;color:#1f1408}
+  .polaroid .prole{font-size:8.5px;color:#7a6b50;margin-top:5px}
+  .polaroid .pstate{color:#b5641f}
+
+  /* buttons */
+  .btnrow{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .printbtn{border:1px solid var(--accent);color:var(--accent-soft);background:linear-gradient(#1d130b,#160f09);
+    font-family:var(--mono);font-size:12px;letter-spacing:.1em;padding:14px 26px;border-radius:3px;text-transform:lowercase;
+    box-shadow:0 0 22px rgba(224,123,57,.14)}
+  .ghostbtns{display:flex;gap:18px}
+  .ghostbtns span{font-size:11px;letter-spacing:.08em;text-transform:lowercase}
+  .ghostbtns .keep{color:var(--green)}.ghostbtns .cut{color:var(--red)}.ghostbtns .retake{color:var(--accent)}
+
+  .legend td:first-child{white-space:nowrap}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+
+  .foot{padding-top:46px;font-size:12px;color:var(--t3)}
+  .foot b{color:var(--t2);font-weight:400}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="wordmark">DARK<b>ROOM</b></div>
+    <h1>The Darkroom Design Pack</h1>
+    <p class="lede">A photographer's darkroom for your commit history. Each commit is a frame of film; the ones worth keeping are <em>developed</em> into résumé lines and printed. This document is the visual reference for building it.</p>
+    <div class="metaline">
+      <span class="pill">Fidelity · <b>High</b></span>
+      <span class="pill">Canvas · <b>1360 × 880</b></span>
+      <span class="pill">Theme · <b>Dark, warm amber</b></span>
+      <span class="pill">Reference file · <b>darkroom-reference.html</b></span>
+    </div>
+  </header>
+
+  <!-- METAPHOR -->
+  <section>
+    <div class="kicker">01 — The mental model</div>
+    <h2>Everything is a darkroom object</h2>
+    <p class="intro">The whole product leans on one extended metaphor. Keep the language consistent in UI copy, component names, and code — it's the personality of the app.</p>
+    <div class="glossary">
+      <div class="gcard"><div class="term"><b>Film canister</b> → repository</div><div class="def">Each loaded repo is a canister at the top of the strip. The mounted one glows amber. Clicking swaps which roll's frames are shown.</div></div>
+      <div class="gcard"><div class="term"><b>Film frame</b> → commit</div><div class="def">One commit = one frame on the strip, numbered like film (e.g. <code>A · 014</code>), with SHA, message, and +/− diff stats.</div></div>
+      <div class="gcard"><div class="term"><b>Developing</b> → generating a bullet</div><div class="def">When the system turns a commit into an achievement line, the frame is "developing" — a pulsing placeholder until the serif bullet appears.</div></div>
+      <div class="gcard"><div class="term"><b>The print / polaroid</b> → résumé</div><div class="def">Kept frames compile into a printed résumé, shown as a polaroid: the page image inside a black mat, on white print paper.</div></div>
+      <div class="gcard"><div class="term"><b>Develop &amp; print</b> → export</div><div class="def">The primary action. Compiles all kept frames into the résumé document.</div></div>
+      <div class="gcard"><div class="term"><b>Keep · cut · retake</b> → curate</div><div class="def">Per-frame actions. <b>Keep</b> puts a bullet on the print, <b>cut</b> removes it (struck, restorable), <b>retake</b> regenerates the bullet.</div></div>
+    </div>
+  </section>
+
+  <!-- COLOR -->
+  <section>
+    <div class="kicker">02 — Color</div>
+    <h2>Tokens</h2>
+    <p class="intro">A near-black warm base lit by a single amber accent — the safelight. Greens and reds appear only as diff stats. Define these as CSS custom properties; names below match the prototype.</p>
+
+    <h3>Surfaces &amp; lines</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#0a0705"></div><div class="meta"><div class="nm">--bg</div><div class="hex">#0A0705</div><div class="use">App background base</div></div></div>
+      <div class="sw"><div class="chip" style="background:#0f0a06"></div><div class="meta"><div class="nm">--surface</div><div class="hex">#0F0A06</div><div class="use">Bars, panel base</div></div></div>
+      <div class="sw"><div class="chip" style="background:#1a1512"></div><div class="meta"><div class="nm">--card</div><div class="hex">#1A1512</div><div class="use">Raised cards</div></div></div>
+      <div class="sw"><div class="chip" style="background:#2a2017"></div><div class="meta"><div class="nm">--border</div><div class="hex">#2A2017</div><div class="use">Visible borders</div></div></div>
+      <div class="sw"><div class="chip" style="background:#1c140d"></div><div class="meta"><div class="nm">--border-sub</div><div class="hex">#1C140D</div><div class="use">Hairline dividers</div></div></div>
+    </div>
+
+    <h3>Accent — the safelight</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#E07B39"></div><div class="meta"><div class="nm">--accent</div><div class="hex">#E07B39</div><div class="use">Primary amber · active state, bullet rule</div></div></div>
+      <div class="sw"><div class="chip" style="background:#f3ad6f"></div><div class="meta"><div class="nm">--accent-soft</div><div class="hex">#F3AD6F</div><div class="use">Highlights, hover text</div></div></div>
+      <div class="sw"><div class="chip" style="background:#C96B2A"></div><div class="meta"><div class="nm">--accent-hover</div><div class="hex">#C96B2A</div><div class="use">Pressed / hover fill</div></div></div>
+      <div class="sw"><div class="chip" style="background:#3c2e1c"></div><div class="meta"><div class="nm">--dev</div><div class="hex">#3C2E1C</div><div class="use">Developing / dormant amber</div></div></div>
+    </div>
+
+    <h3>Text &amp; signal</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#cdbb9a"></div><div class="meta"><div class="nm">--t1</div><div class="hex">#CDBB9A</div><div class="use">Primary text</div></div></div>
+      <div class="sw"><div class="chip" style="background:#8c8072"></div><div class="meta"><div class="nm">--t2</div><div class="hex">#8C8072</div><div class="use">Secondary text, labels</div></div></div>
+      <div class="sw"><div class="chip" style="background:#5f4f39"></div><div class="meta"><div class="nm">--t3</div><div class="hex">#5F4F39</div><div class="use">Muted / metadata</div></div></div>
+      <div class="sw"><div class="chip" style="background:#3FB950"></div><div class="meta"><div class="nm">--green</div><div class="hex">#3FB950</div><div class="use">Additions (+)</div></div></div>
+      <div class="sw"><div class="chip" style="background:#DA3630"></div><div class="meta"><div class="nm">--red</div><div class="hex">#DA3630</div><div class="use">Deletions (−)</div></div></div>
+    </div>
+
+    <h3>Signature lighting</h3>
+    <p>The warm glow is not flat fill — it's a radial amber wash over a diagonal gradient, applied to the app and panel backgrounds. Recreate it exactly:</p>
+    <div class="spec" style="margin-top:16px">
+      <div class="tag"><span>app background</span></div>
+      <div class="sample-mono" style="font-size:12px;color:var(--t2);line-height:1.8">background:<br>&nbsp;&nbsp;radial-gradient(80% 65% at 28% 16%, rgba(224,123,57,.16), transparent 58%),<br>&nbsp;&nbsp;linear-gradient(160deg, #1a1009, #0d0805 58%, #070504);</div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section>
+    <div class="kicker">03 — Typography</div>
+    <h2>Two voices</h2>
+    <p class="intro">A monospace UI voice (the machine / the contact sheet) against a serif editorial voice (the developed print). Pulled from Google Fonts.</p>
+
+    <div class="spec">
+      <div class="tag"><span><b>Playfair Display</b></span><span>serif · 400 / 500 / italic</span><span>used for: résumé bullets, names, headings</span></div>
+      <div class="sample-serif" style="font-size:30px;color:#ecdcc0;line-height:1.25">Architected a real-time event system, cutting latency by 80%.</div>
+      <div class="sample-serif" style="font-style:italic;font-size:15px;color:var(--t2);margin-top:10px">The print — your history, developed.</div>
+    </div>
+
+    <div class="spec">
+      <div class="tag"><span><b>JetBrains Mono</b></span><span>mono · 400 / 500</span><span>used for: commits, labels, stats, buttons</span></div>
+      <div class="sample-mono" style="font-size:13px;color:var(--t1)">a3f7c1d&nbsp;&nbsp;refactor: replace polling with websocket subscriptions</div>
+      <div class="sample-mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-top:12px">film strip · 142 frames · 9 developed</div>
+    </div>
+
+    <h3>Scale &amp; usage</h3>
+    <table>
+      <thead><tr><th>Role</th><th>Family</th><th>Size / spacing</th><th>Color</th></tr></thead>
+      <tbody>
+        <tr><td>Résumé bullet</td><td>Playfair</td><td>13px · 1.55 lh</td><td><code>#e2d2b4</code></td></tr>
+        <tr><td>Name (print)</td><td>Playfair</td><td>19px</td><td><code>#1f1408</code> on paper</td></tr>
+        <tr><td>Commit message</td><td>JetBrains</td><td>12px</td><td><code>--t1</code></td></tr>
+        <tr><td>SHA / stats / meta</td><td>JetBrains</td><td>10px</td><td><code>--t3</code> / signal</td></tr>
+        <tr><td>Section label</td><td>JetBrains</td><td>10px · .1em · uppercase</td><td><code>--t2</code></td></tr>
+        <tr><td>Frame number</td><td>JetBrains</td><td>9px · vertical-rl</td><td><code>--t3</code></td></tr>
+        <tr><td>Buttons</td><td>JetBrains</td><td>12px · .1em · lowercase</td><td><code>--accent-soft</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- LAYOUT -->
+  <section>
+    <div class="kicker">04 — Layout</div>
+    <h2>Three regions</h2>
+    <p class="intro">A fixed <code>1360 × 880</code> frame: a 52px top bar over a body split into the film-strip column (fluid) and a fixed 372px résumé panel.</p>
+    <div class="diagram">
+      <div class="d-top"><span class="dl">DARK<b>ROOM</b></span><span class="dr">the darkroom · the print · settings</span></div>
+      <div class="d-body">
+        <div class="d-strip">
+          <div class="d-rail"><i class="on"></i><i></i><i></i><i></i></div>
+          <div class="d-frames"><div class="fr a"></div><div class="fr b"></div><div class="fr c"></div><div class="fr b"></div><div class="fr a"></div></div>
+        </div>
+        <div class="d-panel"><div class="pol"><div class="im"></div><div class="cap"></div></div></div>
+      </div>
+    </div>
+    <div class="d-tags">
+      <div><b>Top bar · 52px</b>Wordmark left, nav right. <code>border-bottom: --border-sub</code>, bg <code>rgba(15,10,6,.6)</code>.</div>
+      <div><b>Film strip · flex 1</b>Canister rail → strip head → sprockets → scrolling frames → sprockets. <code>border-right</code> divides it from the panel.</div>
+      <div><b>Résumé panel · 372px</b>Fixed width. Title, the polaroid print, a small meta readout, and the develop &amp; print button pinned to the bottom.</div>
+    </div>
+    <h3>Key measurements</h3>
+    <table>
+      <thead><tr><th>Element</th><th>Spec</th></tr></thead>
+      <tbody>
+        <tr><td>Outer frame</td><td><code>1360 × 880</code>, column flex</td></tr>
+        <tr><td>Top bar</td><td>height <code>52px</code>, padding <code>0 22px</code></td></tr>
+        <tr><td>Canister rail</td><td>padding <code>18px 30px 16px</code>, gap <code>20px</code>, items top-aligned</td></tr>
+        <tr><td>Frame row</td><td>30px gutter + <code>border-bottom</code> row, padding <code>16px 0 16px 18px</code></td></tr>
+        <tr><td>Sprocket holes</td><td><code>12 × 8</code>, radius 2, gap 6, repeated across width</td></tr>
+        <tr><td>Résumé panel</td><td><code>flex: 0 0 372px</code>, padding <code>30px 36px 32px</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section>
+    <div class="kicker">05 — Components</div>
+    <h2>The pieces, in their real states</h2>
+    <p class="intro">These are live recreations at the prototype's exact values — colors, radii, and type are copy-ready.</p>
+
+    <!-- canisters -->
+    <div class="comp">
+      <div class="ch"><span class="nm">Film canister · repo toggle</span><span class="meta">body 46 × 78 · radius 7</span></div>
+      <div class="stage">
+        <div class="can active"><div class="body"></div><div class="ltr">A</div><div class="lab">api-gateway</div></div>
+        <div class="can"><div class="body"></div><div class="ltr">B</div><div class="lab">auth-service</div></div>
+        <div class="can"><div class="body"></div><div class="ltr">C</div><div class="lab">payments-core</div></div>
+      </div>
+      <div class="notes"><b>Active</b> = mounted roll: amber body gradient <code>#3a2410 → #E07B39 → #3a2410</code> + glow <code>0 0 22px rgba(224,123,57,.5)</code>. Letter and label tint to accent. <b>Default</b> = dark metal with a striped film-leader band. Letter (A–D) sits above the repo name, both centered <b>below</b> the canister. Click swaps the mounted roll and reloads the frame list.</div>
+    </div>
+
+    <!-- frames -->
+    <div class="comp">
+      <div class="ch"><span class="nm">Film frame · commit</span><span class="meta">four states</span></div>
+      <div class="stage" style="flex-direction:column;gap:6px">
+        <div class="frame developed"><div class="gutter"><div class="fnum">A · 014</div></div><div class="frow">
+          <div class="commit"><span class="sha">a3f7c1d</span> refactor: replace polling with websocket subscriptions<span class="stats"><span class="add">+428</span><span class="del">−192</span><span class="f">14 files</span></span></div>
+          <div class="devlabel">developed</div>
+          <div class="bullet">Architected a real-time event system, cutting order-update latency by 80% across 12K concurrent sessions.</div>
+          <div class="actions"><span class="keep" style="color:var(--green)">keep</span><span class="cut" style="color:var(--red)">cut</span><span class="retake" style="color:var(--accent)">retake</span></div>
+        </div></div>
+        <div class="frame developing"><div class="gutter"><div class="fnum">B · 006</div></div><div class="frow">
+          <div class="commit"><span class="sha">f10aa42</span> feat: add idempotency keys to payment intents</div>
+          <div class="devlabel" style="color:var(--dev)">developing</div>
+          <div class="processing">· · · developing · · ·</div>
+        </div></div>
+        <div class="frame unexposed"><div class="gutter"><div class="fnum">B · —</div></div><div class="frow">
+          <div class="commit">chore: bump version to 1.4.2<span class="badge">no exposure</span></div>
+        </div></div>
+        <div class="frame cut"><div class="gutter"><div class="fnum">C · 003</div></div><div class="frow">
+          <div class="commit"><span class="sha">9b4d077</span> wip: experiment with redis caching layer<span class="badge">cut</span></div>
+          <div class="bullet">Prototyped a Redis caching layer to reduce read load on the primary database.</div>
+        </div></div>
+      </div>
+      <div class="notes"><b>Developed</b> — serif bullet with a 2px amber left-rule; keep/cut/retake actions. <b>Developing</b> — frow tinted <code>rgba(224,123,57,.05)</code>, pulsing placeholder (1.5s ease-in-out, opacity .35↔.85). <b>Unexposed</b> — trivial commit, no bullet; muted with a <code>no exposure</code> badge. <b>Cut</b> — 45% opacity with a rotated strike line; shows a <code>restore</code> control.</div>
+    </div>
+
+    <!-- polaroid -->
+    <div class="comp">
+      <div class="ch"><span class="nm">Résumé polaroid · the print</span><span class="meta">paper #ECE6D6 · black mat 13px</span></div>
+      <div class="stage">
+        <div class="polaroid">
+          <div class="pimage"><img src="resume.png" alt="résumé"><div class="wash"></div></div>
+          <div class="pcaption"><div class="pname">Farhan Kittur</div><div class="prole">software engineer · 2026 · <span class="pstate">62% developed</span></div></div>
+        </div>
+        <div style="flex:1;min-width:240px">
+          <div class="notes" style="border:none;padding:0">Structure, outside-in: <b>white print paper</b> <code>#ECE6D6</code> (classic polaroid — equal top/side border, deeper bottom) → <b>black image mat</b> <code>#0A0705</code> at 13px padding → the <b>résumé page image</b> at its native <code>610 × 791</code> ratio. A 2px amber "wash" line sits at the image's bottom-left as a developing mark. Caption in the bottom border: serif name <code>#1f1408</code>, then mono role + amber <code>#b5641f</code> progress on one line. The image is the user's actual résumé render — swap <code>resume.png</code> for a live document thumbnail in production.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- buttons -->
+    <div class="comp">
+      <div class="ch"><span class="nm">Actions</span><span class="meta">primary + inline</span></div>
+      <div class="stage" style="align-items:center">
+        <button class="printbtn">develop &amp; print</button>
+        <div class="ghostbtns"><span class="keep">keep</span><span class="cut">cut</span><span class="retake">retake</span></div>
+      </div>
+      <div class="notes"><b>Primary</b> — outlined amber on a dark gradient with a soft outer glow; lowercase, <code>.1em</code> tracking, radius 3. Hover deepens the glow. <b>Inline frame actions</b> — borderless text in green / red / amber, lowercase; color-only hover, no fill.</div>
+    </div>
+  </section>
+
+  <!-- STATES -->
+  <section>
+    <div class="kicker">06 — State legend</div>
+    <h2>Frame lifecycle</h2>
+    <p class="intro">A frame moves through these states. The class name on <code>.frame</code> drives the styling.</p>
+    <table class="legend">
+      <thead><tr><th>State</th><th>Meaning</th><th>Visual</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="background:#E07B39"></span><code>.developed</code></td><td>Bullet generated &amp; on the print</td><td>Serif bullet, amber rule, keep/cut/retake</td></tr>
+        <tr><td><span class="dot" style="background:#f3ad6f"></span><code>.developing</code></td><td>Bullet being generated now</td><td>Tinted row, pulsing "developing" placeholder</td></tr>
+        <tr><td><span class="dot" style="background:#46382a"></span><code>.unexposed</code></td><td>Commit too trivial for a bullet</td><td>Muted, <code>no exposure</code> badge, no bullet</td></tr>
+        <tr><td><span class="dot" style="background:#5f4f39"></span><code>.cut</code></td><td>Removed from the print by the user</td><td>45% opacity, strike line, <code>restore</code></td></tr>
+        <tr><td><span class="dot" style="background:#3FB950"></span><code>.developed.kept</code></td><td>Explicitly kept</td><td>Same as developed; counts toward the print</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- INTERACTIONS -->
+  <section style="border-bottom:none">
+    <div class="kicker">07 — Behavior</div>
+    <h2>Interactions</h2>
+    <table>
+      <thead><tr><th>Trigger</th><th>Behavior</th></tr></thead>
+      <tbody>
+        <tr><td>Click a canister</td><td>Set it active (amber glow), update the strip header label to the repo name, and load that repo's frames. <em>Prototype stubs the swap with a class toggle + label update; wire to real repo data in production.</em></td></tr>
+        <tr><td>keep</td><td>Marks the frame kept; its bullet is included on the print. Updates the "frames kept" count.</td></tr>
+        <tr><td>cut</td><td>Removes the bullet from the print; frame goes to <code>.cut</code> (struck), offering <code>restore</code>.</td></tr>
+        <tr><td>retake</td><td>Regenerates the bullet for that commit (re-runs the "develop" step → brief <code>.developing</code> state).</td></tr>
+        <tr><td>develop &amp; print</td><td>Compiles all kept frames into the résumé document and produces the printable output.</td></tr>
+        <tr><td>Developing pulse</td><td><code>@keyframes</code> opacity .35 ↔ .85, 1.5s ease-in-out, infinite, on the placeholder only.</td></tr>
+      </tbody>
+    </table>
+    <h3>Notes for implementation</h3>
+    <p>Respect <code>prefers-reduced-motion</code> — drop the developing pulse to a static state. The frame list scrolls independently; canister rail, strip head, and sprockets stay fixed. The résumé panel's button is pinned to the bottom with <code>margin-top:auto</code>.</p>
+  </section>
+
+  <div class="foot">
+    <b>Files in this bundle:</b> <code>darkroom-reference.html</code> (the full interactive design) · <code>design.html</code> (this pack) · <code>resume.png</code> (sample print image) · <code>README.md</code> (handoff doc).<br>
+    <b>Fonts:</b> Playfair Display + JetBrains Mono, via Google Fonts.
+  </div>
+
+</div>
+</body>
+</html>

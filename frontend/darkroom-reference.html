@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Darkroom — Faithful (refined)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0705; --surface:#0f0a06; --card:#1a1512;
+    --border:#2a2017; --border-sub:#1c140d;
+    --accent:#E07B39; --accent-soft:#f3ad6f; --accent-hover:#C96B2A;
+    --t1:#cdbb9a; --t2:#8c8072; --t3:#5f4f39; --dev:#3c2e1c;
+    --green:#3FB950; --red:#DA3630;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --serif:'Playfair Display',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%}
+  body{background:var(--bg);color:var(--t1);font-family:var(--mono);-webkit-font-smoothing:antialiased;overflow:hidden}
+  /* ===== lighting carried from Negative & Positive ===== */
+  .app{width:1360px;height:880px;display:flex;flex-direction:column;
+    background:
+      radial-gradient(80% 65% at 28% 16%, rgba(224,123,57,.16), transparent 58%),
+      linear-gradient(160deg,#1a1009,#0d0805 58%,#070504)}
+
+  /* top bar */
+  .topbar{height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;border-bottom:1px solid var(--border-sub);background:rgba(15,10,6,.6)}
+  .wordmark{font-size:14px;font-weight:500;letter-spacing:.12em;color:var(--t1)}
+  .wordmark b{color:var(--accent);font-weight:500}
+  .topnav{display:flex;gap:26px;align-items:center}
+  .topnav span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+  .topnav .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+  .body{flex:1;display:flex;min-height:0}
+
+  /* ===== film strip (shape unchanged, recolored) ===== */
+  .strip{flex:1;display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--border-sub);position:relative}
+
+  /* canister rail — repositories you toggle between */
+  .canrail{flex:0 0 auto;display:flex;align-items:flex-start;gap:20px;padding:18px 30px 16px;
+    border-bottom:1px solid var(--border-sub)}
+  .can{width:64px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;user-select:none}
+  .can .body{flex:0 0 auto;width:46px;height:78px;border-radius:7px;position:relative;transition:box-shadow .2s,background .2s;
+    background:linear-gradient(90deg,#1c150e,#2c2117 40%,#1c150e);border:1px solid #2c2117;box-shadow:inset 0 0 10px rgba(0,0,0,.6)}
+  .can .body::before{content:"";position:absolute;top:-7px;left:8px;right:8px;height:10px;border-radius:4px 4px 2px 2px;background:#3a2c1c}
+  .can .body::after{content:"";position:absolute;left:7px;right:7px;top:22px;height:32px;background:repeating-linear-gradient(90deg,#231a11 0 3px,#2e2418 3px 6px);border-radius:2px}
+  .can:hover .body{box-shadow:inset 0 0 10px rgba(0,0,0,.6),0 0 14px rgba(224,123,57,.22)}
+  .can.active .body{background:linear-gradient(90deg,#3a2410,#E07B39 45%,#3a2410);box-shadow:0 0 22px rgba(224,123,57,.5),inset 0 0 10px rgba(0,0,0,.4)}
+  .can .ltr{font-size:9px;color:var(--t3);letter-spacing:.1em}
+  .can.active .ltr{color:var(--accent)}
+  .can .lab{font-size:8px;letter-spacing:.04em;color:var(--t2);text-align:center;line-height:1.2}
+  .can.active .lab{color:var(--accent-soft)}
+  .canrail .railcount{margin-left:auto;align-self:flex-start;margin-top:6px;font-size:10px;color:var(--t3);letter-spacing:.06em;text-align:right;line-height:1.6}
+
+  .strip-head{display:flex;align-items:baseline;justify-content:space-between;padding:14px 30px 12px}
+  .strip-head .label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+  .strip-head .count{font-size:10px;color:var(--t3);letter-spacing:.06em}
+  .sprockets{display:flex;gap:6px;padding:0 30px;height:14px;align-items:center;flex-wrap:nowrap;overflow:hidden}
+  .sprockets i{width:12px;height:8px;border-radius:2px;border:1px solid var(--border);flex:0 0 auto}
+  .frames{flex:1;overflow-y:auto;padding:8px 0}
+  .frames::-webkit-scrollbar{width:8px}
+  .frames::-webkit-scrollbar-thumb{background:#241a10;border-radius:4px}
+
+  .frame{display:flex;gap:0;padding:0 30px;position:relative}
+  .gutter{flex:0 0 30px;display:flex;align-items:center;justify-content:center}
+  .fnum{writing-mode:vertical-rl;font-size:9px;letter-spacing:.08em;color:var(--t3);white-space:nowrap}
+  .frow{flex:1;border-bottom:1px solid var(--border-sub);padding:16px 0 16px 18px;min-width:0}
+
+  .commit{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t1)}
+  .sha{font-size:10px;color:var(--t3)}
+  .stats{display:flex;gap:10px;font-size:10px;margin-left:auto}
+  .stats .add{color:var(--green)} .stats .del{color:var(--red)} .stats .f{color:var(--t2)}
+  .devlabel{font-size:10px;color:#6a5a40;letter-spacing:.08em;margin:12px 0 7px}
+  .bullet{font-family:var(--serif);font-size:13px;line-height:1.55;color:#e2d2b4;border-left:2px solid var(--accent);padding-left:14px;text-wrap:pretty}
+  .actions{display:flex;gap:18px;margin-top:13px;padding-left:14px}
+  .actions button{background:none;border:none;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    color:var(--t2);cursor:pointer;text-transform:lowercase;transition:color .15s}
+  .actions .keep:hover{color:var(--green)} .actions .cut:hover{color:var(--red)} .actions .retake:hover{color:var(--accent)}
+
+  /* state: developing */
+  .frame.developing .frow{background:rgba(224,123,57,.05);margin-left:-30px;padding-left:48px}
+  .frame.developing .commit{color:var(--t3)}
+  .frame.developing .bullet{border-left-color:var(--dev);color:var(--dev)}
+  .processing{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--accent-soft);
+    border-left:2px solid var(--dev);padding-left:14px;animation:pulse 1.5s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.35}50%{opacity:.85}}
+
+  /* state: unexposed */
+  .frame.unexposed .commit{color:#46382a}
+  .frame.unexposed .gutter .fnum{color:#34291c}
+  .badge{display:inline-block;font-size:9px;letter-spacing:.08em;color:#3a2e20;border:1px solid #2a2017;
+    border-radius:2px;padding:2px 7px}
+
+  /* state: cut */
+  .frame.cut .frow{opacity:.4;position:relative}
+  .frame.cut .frow::after{content:"";position:absolute;left:-30px;right:0;top:50%;height:1px;background:#3a2c1c;
+    transform:rotate(-3deg)}
+  .restore{font-size:10px;color:var(--t3);background:none;border:none;font-family:var(--mono);cursor:pointer;margin-top:10px;padding-left:14px}
+
+  /* ===== résumé snapshot panel ===== */
+  .panel{flex:0 0 372px;background:linear-gradient(160deg,#120c08,#0a0705);display:flex;flex-direction:column;align-items:center;padding:30px 36px 32px;
+    box-shadow:inset 1px 0 0 rgba(224,123,57,.04)}
+  .panel .ptitle{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);align-self:flex-start;margin-bottom:6px}
+  .panel .psub{font-size:9px;letter-spacing:.05em;color:var(--t3);align-self:flex-start;margin-bottom:22px}
+
+  /* polaroid print of the résumé — black image edge inside white print paper */
+  .polaroid{width:272px;background:#ece6d6;padding:13px 13px 0;border-radius:2px;
+    box-shadow:0 26px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.55)}
+  .pimage{position:relative;background:#0a0705;padding:13px;overflow:hidden;
+    box-shadow:inset 0 0 30px rgba(0,0,0,.6)}
+  .pimage img{display:block;width:100%;aspect-ratio:610/791;object-fit:cover;object-position:top center;
+    background:#e9e2d2}
+  .pimage .wash{position:absolute;left:13px;bottom:13px;height:2px;width:52%;background:var(--accent)}
+  .pcaption{padding:14px 5px 18px}
+  .pname{display:block;font-family:var(--serif);font-size:19px;color:#1f1408;letter-spacing:.01em}
+  .prole{font-size:9.5px;color:#7a6b50;letter-spacing:.05em;margin-top:7px;text-transform:lowercase}
+  .pstate{color:#b5641f;letter-spacing:.08em}
+
+  .snapmeta{width:272px;margin-top:22px;border-top:1px solid var(--border);padding-top:16px;display:flex;flex-direction:column;gap:10px}
+  .smrow{display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.04em}
+  .smrow .k{color:var(--t3)}
+  .smrow .v{color:var(--t2)}
+  .smrow .v b{color:var(--accent-soft);font-weight:500}
+
+  .printbtn{width:272px;margin-top:auto;border:1px solid var(--accent);color:var(--accent-soft);background:linear-gradient(#1d130b,#160f09);
+    font-family:var(--mono);font-size:12px;letter-spacing:.1em;padding:15px;cursor:pointer;text-transform:lowercase;border-radius:3px;
+    box-shadow:0 0 22px rgba(224,123,57,.14)}
+  .printbtn:hover{box-shadow:0 0 32px rgba(224,123,57,.3)}
+</style>
+</head>
+<body>
+<div class="app" data-screen-label="Faithful — refined">
+  <div class="topbar">
+    <div class="wordmark">DARK<b>ROOM</b></div>
+    <div class="topnav"><span>the darkroom</span><span>the print</span><span>darkroom settings</span></div>
+  </div>
+  <div class="body">
+    <!-- FILM STRIP -->
+    <div class="strip">
+
+      <!-- CANISTER RAIL: repositories you toggle between -->
+      <div class="canrail" id="canrail">
+        <div class="can active" data-roll="api-gateway"><div class="body"></div><div class="ltr">A</div><div class="lab">api-gateway</div></div>
+        <div class="can" data-roll="auth-service"><div class="body"></div><div class="ltr">B</div><div class="lab">auth-service</div></div>
+        <div class="can" data-roll="payments-core"><div class="body"></div><div class="ltr">C</div><div class="lab">payments-core</div></div>
+        <div class="can" data-roll="ui-components"><div class="body"></div><div class="ltr">D</div><div class="lab">ui-components</div></div>
+        <div class="railcount">4 canisters loaded<br>roll A mounted</div>
+      </div>
+
+      <div class="strip-head">
+        <div class="label">film strip — <span id="rollname">api-gateway</span></div>
+        <div class="count">142 frames · 9 developed</div>
+      </div>
+      <div class="sprockets" id="spr-top"></div>
+      <div class="frames">
+
+        <!-- developed -->
+        <div class="frame developed">
+          <div class="gutter"><div class="fnum">A · 014</div></div>
+          <div class="frow">
+            <div class="commit"><span class="sha">a3f7c1d</span> refactor: replace polling with websocket subscriptions
+              <div class="stats"><span class="add">+428</span><span class="del">−192</span><span class="f">14 files</span></div>
+            </div>
+            <div class="devlabel">developed</div>
+            <div class="bullet">Architected a real-time event system, replacing HTTP polling with WebSocket subscriptions and cutting order-update latency by 80% across 12K concurrent sessions.</div>
+            <div class="actions"><button class="keep">keep</button><button class="cut">cut</button><button class="retake">retake</button></div>
+          </div>
+        </div>
+
+        <!-- developed -->
+        <div class="frame developed">
+          <div class="gutter"><div class="fnum">A · 015</div></div>
+          <div class="frow">
+            <div class="commit"><span class="sha">7d20b9e</span> perf: batch db writes in ingestion, add backpressure
+              <div class="stats"><span class="add">+210</span><span class="del">−88</span><span class="f">7 files</span></div>
+            </div>
+            <div class="devlabel">developed</div>
+            <div class="bullet">Redesigned the ingestion pipeline with batched writes and backpressure controls, sustaining 50K events/sec with zero data loss under peak load.</div>
+            <div class="actions"><button class="keep">keep</button><button class="cut">cut</button><button class="retake">retake</button></div>
+          </div>
+        </div>
+
+        <!-- developing -->
+        <div class="frame developing">
+          <div class="gutter"><div class="fnum">B · 006</div></div>
+          <div class="frow">
+            <div class="commit"><span class="sha">f10aa42</span> feat: add idempotency keys to payment intents</div>
+            <div class="devlabel" style="color:var(--dev)">developing</div>
+            <div class="processing">· · · developing · · ·</div>
+          </div>
+        </div>
+
+        <!-- unexposed -->
+        <div class="frame unexposed">
+          <div class="gutter"><div class="fnum">B · —</div></div>
+          <div class="frow">
+            <div class="commit">chore: bump version to 1.4.2
+              <span style="margin-left:auto"><span class="badge">no exposure</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- developed -->
+        <div class="frame developed">
+          <div class="gutter"><div class="fnum">B · 007</div></div>
+          <div class="frow">
+            <div class="commit"><span class="sha">c8e1f55</span> feat: oauth2 device flow for CLI auth
+              <div class="stats"><span class="add">+612</span><span class="del">−34</span><span class="f">21 files</span></div>
+            </div>
+            <div class="devlabel">developed</div>
+            <div class="bullet">Implemented OAuth2 device-authorization flow for the command-line client, enabling secure headless login for 4,000+ CI runners.</div>
+            <div class="actions"><button class="keep">keep</button><button class="cut">cut</button><button class="retake">retake</button></div>
+          </div>
+        </div>
+
+        <!-- cut -->
+        <div class="frame cut">
+          <div class="gutter"><div class="fnum">C · 003</div></div>
+          <div class="frow">
+            <div class="commit"><span class="sha">9b4d077</span> wip: experiment with redis caching layer
+              <span style="margin-left:auto"><span class="badge">cut</span></span>
+            </div>
+            <div class="bullet">Prototyped a Redis caching layer to reduce read load on the primary database.</div>
+            <button class="restore">restore</button>
+          </div>
+        </div>
+
+        <!-- developed -->
+        <div class="frame developed">
+          <div class="gutter"><div class="fnum">C · 004</div></div>
+          <div class="frow">
+            <div class="commit"><span class="sha">2ef9a10</span> feat: ledger reconciliation job + alerting
+              <div class="stats"><span class="add">+339</span><span class="del">−51</span><span class="f">9 files</span></div>
+            </div>
+            <div class="devlabel">developed</div>
+            <div class="bullet">Built a nightly ledger-reconciliation job with anomaly alerting that caught $1.2M in mismatched transactions in its first quarter.</div>
+            <div class="actions"><button class="keep">keep</button><button class="cut">cut</button><button class="retake">retake</button></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="sprockets" id="spr-bot"></div>
+    </div>
+
+    <!-- RÉSUMÉ SNAPSHOT PANEL -->
+    <div class="panel">
+      <div class="ptitle">résumé snapshot</div>
+      <div class="psub">the print, developing from your kept frames</div>
+      <div class="polaroid">
+        <div class="pimage">
+          <img src="resume.png" alt="résumé">
+          <div class="wash"></div>
+        </div>
+        <div class="pcaption">
+          <span class="pname">Farhan Kittur</span>
+          <div class="prole">software engineer · 2026 · <span class="pstate">62% developed</span></div>
+        </div>
+      </div>
+      <div class="snapmeta">
+        <div class="smrow"><span class="k">frames kept</span><span class="v"><b>9</b> of 142</span></div>
+        <div class="smrow"><span class="k">canisters</span><span class="v">4 loaded</span></div>
+        <div class="smrow"><span class="k">last developed</span><span class="v">A · 014</span></div>
+      </div>
+      <button class="printbtn">develop &amp; print</button>
+    </div>
+  </div>
+</div>
+<script>
+  // sprocket holes fill the width
+  function fill(id){const el=document.getElementById(id);const n=Math.floor(1000/18);let s='';for(let i=0;i<n;i++)s+='<i></i>';el.innerHTML=s;}
+  fill('spr-top');fill('spr-bot');
+
+  // canister toggle (visual only for now — would switch the mounted roll/commits)
+  const rail=document.getElementById('canrail');
+  const rollname=document.getElementById('rollname');
+  rail.querySelectorAll('.can').forEach(can=>{
+    can.addEventListener('click',()=>{
+      rail.querySelectorAll('.can').forEach(c=>c.classList.remove('active'));
+      can.classList.add('active');
+      rollname.textContent=can.dataset.roll;
+    });
+  });
+</script>
+</body>
+</html>
